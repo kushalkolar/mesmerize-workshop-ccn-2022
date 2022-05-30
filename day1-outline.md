@@ -212,8 +212,10 @@ params["mc_kwargs"]["overlaps"] = (148, 148)
 # Set these params and add to batch
 mc_module.add_to_batch(params)
 ```
-#### Gridsearch
+#### Gridsearch with a directory of files
 
-Motion correction: [http://docs.mesmerizelab.org/en/master/user_guides/viewer/modules/caiman_motion_correction.html#add-items](http://docs.mesmerizelab.org/en/v0.6.0/user_guides/viewer/modules/caiman_motion_correction.html#add-items)
+Motion correction: http://docs.mesmerizelab.org/en/master/user_guides/viewer/modules/caiman_motion_correction.html
 
-CNMF: http://docs.mesmerizelab.org/en/v0.6.0/master/user_guides/viewer/modules/cnmf.html#script-usage
+CNMF: http://docs.mesmerizelab.org/en/master/user_guides/viewer/modules/cnmf.html
+
+CNMFE: http://docs.mesmerizelab.org/en/master/user_guides/viewer/modules/cnmfe.html
