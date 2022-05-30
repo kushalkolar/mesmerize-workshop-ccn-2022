@@ -3,7 +3,7 @@ Download the demo data: <LINK HERE>
 
 **If you are using the VM, first upgrade it to v0.7.2 if you have not done so already:**
 
-v0.7.2 contains back-ported fixes from the current `master` branch and works on `python3.6` and within the VM. It requires **CaImAn** v1.8.8
+v0.7.2 contains back-ported fixes from the current `master` branch and works on `python3.6` and within the VM. It requires **CaImAn v1.8.8**
 
 ```bash
 # activate the environment
@@ -114,7 +114,7 @@ Same as above but with endoscope demo and using `gSig_filt` for mcorr
 
 **This is the most efficient way to use Mesmerize**
 
-#### Viewer API Examples
+#### Simple Viewer API Examples
 
 Open the Viewer Console
 
@@ -156,5 +156,64 @@ meta_dict = \
 get_workEnv().imgdata.meta = meta_dict
 ```
 
+#### Script Editor
+
+Same example as above but using the script editor
+
+#### Motion Correction
+  
+```python
+# some mcorr params
+mc_kwargs = \
+{
+    "max_shifts":           (6, 6),
+    "niter_rig":            2,
+    "max_deviation_rigid":  3,
+    "strides":              (196, 196),
+    "overlaps":             (98, 98),
+    "upsample_factor_grid": 4,
+    "gSig_filt":            (10, 10)  # Set to `None` for 2p data
+}
+
+params = \
+{
+    'mc_kwargs':        mc_kwargs,  # the kwargs we set above
+    'item_name':        "will set later per file",
+    'output_bit_depth': "Do not convert"  # can also set to `8` or `16` if you want the output in `8` or `16` bit
+}
+
+# Open a tiff file as shown before
+
+# Get caiman motion correction module, hide=False to not show GUI
+mc_module = get_module("caiman_motion_correction", hide=True)
+
+# Set name for this video file
+name = os.path.basename(path)[:-5]
+params["item_name"] = name
+
+# First variant of params
+params["mc_kwargs"]["strides"] = (196, 196)
+params["mc_kwargs"]["overlaps"] = (98, 98)
+
+# Add one variant of params for this video to the batch
+mc_module.add_to_batch(params)
+
+# Try another variant of params
+params["mc_kwargs"]["strides"] = (256, 256)
+params["mc_kwargs"]["overlaps"] = (128, 128)
+
+# Set these params and add to batch
+mc_module.add_to_batch(params)
+
+# Try one more variant of params
+params["mc_kwargs"]["strides"] = (296, 296)
+params["mc_kwargs"]["overlaps"] = (148, 148)
+
+# Set these params and add to batch
+mc_module.add_to_batch(params)
+```
+#### Gridsearch
+
 Motion correction: http://docs.mesmerizelab.org/en/master/user_guides/viewer/modules/caiman_motion_correction.html#add-items
+
 CNMF: http://docs.mesmerizelab.org/en/master/user_guides/viewer/modules/cnmf.html#script-usage
