@@ -225,9 +225,11 @@ canvas
 
 ## fastplotlib
 
-About a month ago I started writing a *scientific* plotting library using the `pygfx` rendering engine. The goal is to abstract away all the fine details present in a rendering engine, i.e. Geometry, Texture, Cameras, Canvases etc., and provide an easy but flexible API to perform a diverse range of *scientific plotting where performance is the goal*. Note: this is, and never will be, a replacement for plotting libraries such as `matplotlib` or `seaborn` which serve other purposes. I see this as having a huge potential for large-scale imaging analysis, real-time Online closed-loop experiments, and massive insane visualizations combining large-scale imaging, behavior and downstream analysis (this is what I'm using it for right now).
+About a month ago I started writing a *scientific* plotting library using the `pygfx` rendering engine. The goal is to abstract away all the fine details from a rendering engine, i.e. Geometry, Texture, Cameras, Canvases etc., and provide an easy but flexible API forscientific plotting **where performance is the goal**.
 
-Since it uses the `pygfx`, it works using a RFB in jupyter notebooks!
+Note: this is, and never will be, a replacement for plotting libraries such as `matplotlib` or `seaborn` which serve other purposes. Instead, I see this as having a huge potential for large-scale imaging analysis, real-time Online closed-loop experiments, and massive insane visualizations combining large-scale imaging, behavior and downstream analysis (this is what I'm using it for right now).
+
+Since `fastplotlib` uses `pygfx`, it works using a RFB in jupyter notebooks!
 
 ### Examples
 
