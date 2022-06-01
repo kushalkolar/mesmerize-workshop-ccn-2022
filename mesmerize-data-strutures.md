@@ -10,7 +10,9 @@ object.
 
 Contribution walkthrough:
 
+- Install PyCharm IDE.
 1. Examples of changing a .py file or .rst docs file.
+- Just use Eric's contrib examples from keep_memmap, my CaImAn PR example from last week. My contribs to `tslearn` that got me on the paper to show how welcoming the OSS community is. My `pygfx` contribs.
 2. Committing that change to a fork of the repo.
 3. Making a PR
 
