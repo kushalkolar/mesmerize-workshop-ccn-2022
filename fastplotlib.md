@@ -256,3 +256,5 @@ The examples outline more complex interactions with controllers and cameras.
 We are planning to have an unofficial hackathon for `fastplotlib` tomorrow (Saturday)! Location is undecided at the momment. You're also welcome to join if you have questions or ideas on other things from the workshop.
 
 Remote frame buffer doesn't work yet in Colab notebooks, if you're an expert on Colab it would be great to have you!
+
+The hardware on MyBinder seems too old to support Vulkan unfortunately.
