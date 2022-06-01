@@ -1,4 +1,16 @@
-# Plotting lots of stuff very fast
+# Very fast plotting
+
+There will be some examples in this section. Create a new environment and install `fastplotlib` from GitHub to try them out locally in a jupyter notebook:
+
+```bash
+git clone https://github.com/kushalkolar/fastplotlib.git
+cd fastplotlib
+pip install -e .
+
+# try the examples
+cd examples
+jupyter lab
+```
 
 ## Vulkan can leverage modern GPUs
 
@@ -40,4 +52,171 @@ When running within a notebook using [jupyter_rfb](https://github.com/vispy/jupy
 This means you can continue writing code in your notebook within that iPython kernel to interact with the rendered objects and 
 dynamically modify them! You can have multiple canvases and renderers in a notebook and they can interact with each other.
 
+### Examples
 
+This example shows how you can render an image and update it on each rendering cycle. You can try to run it later if you're interested.
+
+```python
+import numpy as np
+from wgpu.gui.auto import WgpuCanvas, run
+import pygfx as gfx
+
+# create a canvas and renderer
+canvas = WgpuCanvas()
+renderer = gfx.renderers.WgpuRenderer(canvas)
+
+# create a scene
+scene = gfx.Scene()
+
+# create a camera, set position to center of image
+camera = gfx.OrthographicCamera(512, 512)
+camera.position.y = 256
+camera.scale.y = -1
+camera.position.x = 256
+
+colormap1 = gfx.cm.plasma
+
+# 512x512 array of random data
+rand_img_data = np.random.rand(512, 512).astype(np.float32) * 255
+
+# create an image graphic
+# define Geometry with the grid set as a Texture using the random data
+img_graphic = gfx.Image(
+    gfx.Geometry(grid=gfx.Texture(rand_img_data, dim=2)),
+    gfx.ImageBasicMaterial(clim=(0, 255), map=colormap1),
+)
+
+scene.add(img_graphic)
+
+
+def animate():
+    # update with new random image
+    img_graphic.geometry.grid.data[:] = np.random.rand(512, 512).astype(np.float32) * 255
+    img_graphic.geometry.grid.update_range((0, 0, 0), img_graphic.geometry.grid.size)
+
+    renderer.render(scene, camera)
+    canvas.request_draw()
+
+canvas.request_draw(animate)
+canvas
+```
+
+This makes it not to complicated to draw scientific plots, but it get quite cumbersome when you want subplots and customizable interactions.
+
+For example a 2x2 gridplot of image data is ~100 LOC
+
+```python
+from wgpu.gui.auto import WgpuCanvas, run
+import pygfx as gfx
+import numpy as np
+
+canvas = WgpuCanvas()
+renderer = gfx.renderers.WgpuRenderer(canvas)
+
+dims = (512, 512)  # image dimensions
+# default cam position
+center_cam_pos = (256, 256, 0)
+
+# colormaps for each of the 4 images
+cmaps = [gfx.cm.inferno, gfx.cm.plasma, gfx.cm.magma, gfx.cm.viridis]
+
+# lists of everything necessary to make this plot
+scenes = list()
+cameras = list()
+images = list()
+controllers = list()
+cntl_defaults = list()
+viewports = list()
+
+for i in range(4):
+    # create scene for this subplot
+    scene = gfx.Scene()
+    scenes.append(scene)
+
+    # create Image WorldObject
+    img = gfx.Image(
+        gfx.Geometry(
+            grid=gfx.Texture(np.random.rand(*dims).astype(np.float32) * 255, dim=2)
+        ),
+        gfx.ImageBasicMaterial(clim=(0, 255), map=cmaps[i]),
+    )
+
+    # add image to list
+    images.append(img)
+    scene.add(img)
+
+    # create camera, set default position, add to list
+    camera = gfx.OrthographicCamera(*dims)
+    camera.position.set(*center_cam_pos)
+    cameras.append(camera)
+
+    # create viewport for this image
+    viewport = gfx.Viewport(renderer)
+    viewports.append(viewport)
+
+    # controller for pan & zoom
+    controller = gfx.PanZoomController(camera.position.clone())
+    controller.add_default_event_handlers(viewport, camera)
+    controllers.append(controller)
+
+    # # get the initial controller params so the camera can be reset later
+    cntl_defaults.append(controller.save_state())
+
+
+@renderer.add_event_handler("resize")
+def layout(event=None):
+    """
+    Update the viewports when the canvas is resized
+    """
+    w, h = renderer.logical_size
+    w2, h2 = w / 2, h / 2
+    viewports[0].rect = 10, 10, w2, h2
+    viewports[1].rect = w / 2 + 5, 10, w2, h2
+    viewports[2].rect = 10, h / 2 + 5, w2, h2
+    viewports[3].rect = w / 2 + 5, h / 2 + 5, w2, h2
+
+
+reset_cameras = False
+
+
+def animate():
+    for img in images:
+        # create new image data
+        img.geometry.grid.data[:] = np.random.rand(*dims).astype(np.float32) * 255
+        img.geometry.grid.update_range((0, 0, 0), img.geometry.grid.size)
+
+    global reset_cameras
+
+    # reset the cameras if `reset_camera` is set to True
+    if reset_cameras:
+        # this should work in the future
+        # for camera, image in zip(cameras, images):
+        #     camera.show_object(image)
+
+        # until a way to center the controller in the scene is implemented
+        for camera, controller, cntrl_default in zip(
+            cameras, controllers, cntl_defaults
+        ):
+            controller.load_state(cntrl_default)
+            controller.update_camera(camera)
+
+        reset_cameras = False
+    else:
+        for camera, controller in zip(cameras, controllers):
+            # if not reset, update with the pan & zoom params
+            controller.update_camera(camera)
+
+    # render the viewports
+    for viewport, s, c in zip(viewports, scenes, cameras):
+        viewport.render(s, c)
+
+    renderer.flush()
+    canvas.request_draw()
+
+
+layout()
+
+
+canvas.request_draw(animate)
+canvas
+```
