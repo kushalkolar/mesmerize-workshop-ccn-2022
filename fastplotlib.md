@@ -12,7 +12,9 @@ cd examples
 jupyter lab
 ```
 
-## Vulkan can leverage modern GPUs
+## Vulkan
+
+Vulkan is a new graphics API that can leverage modern GPUs. OpenGL is really starting to show its age and can't take advantange of modern hardware.
 
 https://vulkan.org/
 > Wikipedia: “Vulkan is a low-overhead, cross-platform API, open standard for 3D graphics and computing… intended to offer higher performance and more efficient CPU and GPU usage compared to older OpenGL APIs. In addition to its lower CPU usage, Vulkan is designed to allow developers to better distribute work among multiple CPU cores.
@@ -220,3 +222,33 @@ layout()
 canvas.request_draw(animate)
 canvas
 ```
+
+## fastplotlib
+
+About a month ago I started writing a *scientific* plotting library using the `pygfx` rendering engine. The goal is to abstract away all the fine details present in a rendering engine, i.e. Geometry, Texture, Cameras, Canvases etc., and provide an easy but flexible API to perform a diverse range of *scientific plotting where performance is the goal*. Note: this is, and never will be, a replacement for plotting libraries such as `matplotlib` or `seaborn` which serve other purposes. I see this as having a huge potential for large-scale imaging analysis, real-time Online closed-loop experiments, and massive insane visualizations combining large-scale imaging, behavior and downstream analysis (this is what I'm using it for right now).
+
+Since it uses the `pygfx`, it works using a RFB in jupyter notebooks!
+
+### Examples
+
+Let's go to: `fastplotlib/examples`
+
+Starting from `simple.ipynb`, this example uses the high level API to draw an image. This abstracts away the canvas, renderer, scene, cameras, geometry, etc. that are defined in `pygfx` (see first `pygfx` example).
+
+```python
+from fastplotlib import Plot
+import numpy as np
+
+plot = Plot()
+
+data = (np.random.rand(512, 512) * 255).astype(np.float32)
+plot.image(data=data,  vmin=0, vmax=255, cmap='viridis')
+
+plot.show()
+```
+
+Grid plots are also easy to create, see `gridplot_simple.ipynb`
+
+The examples outline more complex interactions with controllers and cameras.
+
+We are planning to have an unofficial hackathon for `fastplotlib` tomorrow (Saturday)! Location is undecided at the momment. You're also welcome to join if you have questions or ideas on other things from the workshop.
