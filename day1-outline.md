@@ -1,5 +1,5 @@
 # Mesmerize Intro
-Download the demo data: <LINK HERE>
+Download the demo data: https://www.dropbox.com/s/r3nzryz35mmm44f/mesmerize-demos.zip?dl=0
 
 **If you are using the VM, first upgrade it to v0.7.2 if you have not done so already:**
 
