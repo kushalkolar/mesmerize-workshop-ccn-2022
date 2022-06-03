@@ -54,7 +54,11 @@ To draw objects using the `pygfx` rendering engine:
 **tl;dr: Reduces lots of low-level boilerplate**
 
 **MAJOR BENEFIT OF THIS RENDERING ENGINE: It can draw stuff for desktop applications AND within the browser using a remote frame buffer (RFB). 
-It even works over the internet! The *same exact code* works as a desktop application or within a jupyter notebook!**
+It even works over the internet!**
+
+https://www.youtube.com/watch?v=RUlkE1waYGc
+
+**The *same exact code* works as a desktop application or within a jupyter notebook!**
 
 Furthermore, within a notebook using [jupyter_rfb](https://github.com/vispy/jupyter_rfb), the rendering engine is non-blocking. 
 *This means you can continue writing code in your notebook within that iPython kernel to interact with the rendered objects and 
