@@ -38,7 +38,7 @@ https://vulkan-tutorial.com/Overview
 7. Command pools and command buffers
 8. Main loop
 
-**I just want to do plot.graphic(data=array) !!**
+**I just want to do: plot.graphic(data=\<array\>, cmap="jet") !!**
 
 ## The pygfx rendering engine!
 https://github.com/pygfx/pygfx
