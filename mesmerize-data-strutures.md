@@ -6,16 +6,13 @@ object.
 
 * More details on how the viewer and batch manager interact
 * How the caiman modules interact with batch manager
-* GO into the file outputs from teh batch manager in more detail
+* Go into the file outputs from the batch manager in more detail
 
 Contribution walkthrough:
 
 - Install PyCharm IDE.
 1. Examples of changing a .py file or .rst docs file.
-- Just use Eric's contrib examples from keep_memmap, my CaImAn PR example from last week. My contribs to `tslearn` that got me on the paper to show how welcoming the OSS community is. My `pygfx` contribs.
+- Eric's contrib examples from keep_memmap
+- Su's contrib to the docs
 2. Committing that change to a fork of the repo.
 3. Making a PR
-
-# Contributing to docs
-
-
