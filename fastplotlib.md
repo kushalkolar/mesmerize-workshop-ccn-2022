@@ -20,11 +20,11 @@ https://vulkan.org/
 > Wikipedia: “Vulkan is a low-overhead, cross-platform API, open standard for 3D graphics and computing… intended to offer higher performance and more efficient CPU and GPU usage compared to older OpenGL APIs. In addition to its lower CPU usage, Vulkan is designed to allow developers to better distribute work among multiple CPU cores.
 https://en.wikipedia.org/wiki/Vulkan
 
-tl;dr: Vulkan is new, fast, efficient, and can leverage modern GPU hardware.
+**tl;dr: Vulkan is new, very fast, efficient, and can leverage modern GPU hardware.**
 
 ### Vulkan is too low level for scientific plotting
 
-~100 lines of code involving multiple low-level steps just to draw a triangle\
+**~100 lines of code involving multiple low-level steps just to draw a triangle**\
 https://github.com/KhronosGroup/Vulkan-Samples/blob/master/samples/api/hello_triangle/hello_triangle.cpp
 
 https://vulkan-tutorial.com/Overview
@@ -38,25 +38,32 @@ https://vulkan-tutorial.com/Overview
 7. Command pools and command buffers
 8. Main loop
 
+**I just want to do plot.graphic(data=array) !!**
+
 ## The pygfx rendering engine!
 https://github.com/pygfx/pygfx
 
 A very new rendering engine that can use Vulkan via WGPU. Abstracts away buffer management, pipelines, and shaders :D 
 
-To draw objects using the `pygfx` rendering engine we define their `Geometry`, `Texture` and `Material`. 
-These objects are then placed in a `Scene` and can be viewed using a `Camera` that can be moved with `Controllers` that react to mouse events 
-and user interaction.
+To draw objects using the `pygfx` rendering engine:
+1. Create a canvas & renderer
+2. Define `Geometry`, `Texture` and `Material` of the graphics you wan to draw
+3. Placed objects in a `Scene`
+4. View objects using a `Camera` that can be moved with `Controllers` that react to mouse events and user interaction.
 
-**This rendering engine can be used to draw stuff for desktop applications AND within the browser using a remote frame buffer (RFB). 
-It even works over the internet!! The same exact code works to draw as a desktop application or within a jupyter notebook**
+**tl;dr: Reduces lots of low-level boilerplate**
 
-When running within a notebook using [jupyter_rfb](https://github.com/vispy/jupyter_rfb), the rendering engine is non-blocking. 
-This means you can continue writing code in your notebook within that iPython kernel to interact with the rendered objects and 
-dynamically modify them! You can have multiple canvases and renderers in a notebook and they can interact with each other.
+**MAJOR BENEFIT OF THIS RENDERING ENGINE: It can draw stuff for desktop applications AND within the browser using a remote frame buffer (RFB). 
+It even works over the internet! The *same exact code* works as a desktop application or within a jupyter notebook!**
+
+Furthermore, within a notebook using [jupyter_rfb](https://github.com/vispy/jupyter_rfb), the rendering engine is non-blocking. 
+*This means you can continue writing code in your notebook within that iPython kernel to interact with the rendered objects and 
+dynamically modify them!* You can have multiple canvases and renderers in a notebook and they can interact with each other.
 
 ### Examples
 
-This example shows how you can render an image and update it on each rendering cycle. You can try to run it later if you're interested.
+I will NOT being demoing the rendering engine, you can try these out later if you're curious.\
+This example shows how you can render an image and update it on each rendering cycle.
 
 ```python
 import numpy as np
@@ -103,7 +110,7 @@ canvas.request_draw(animate)
 canvas
 ```
 
-This makes it not to complicated to draw scientific plots, but it get quite cumbersome when you want subplots and customizable interactions.
+This makes it not to complicated to draw scientific plots, **but it get quite cumbersome when you want subplots and customizable interactions.**
 
 For example a 2x2 gridplot of image data is ~100 LOC
 
@@ -225,11 +232,13 @@ canvas
 
 ## fastplotlib
 
-About a month ago I started writing a *scientific* plotting library using the `pygfx` rendering engine. The goal is to abstract away all the fine details from a rendering engine, i.e. Geometry, Texture, Cameras, Canvases etc., and provide an easy but flexible API forscientific plotting **where performance is the goal**.
+About a month ago I started writing a *scientific* plotting library using the `pygfx` rendering engine. 
 
-Note: this is, and never will be, a replacement for plotting libraries such as `matplotlib` or `seaborn` which serve other purposes. Instead, I see this as having a huge potential for large-scale imaging analysis, real-time Online closed-loop experiments, and massive insane visualizations combining large-scale imaging, behavior and downstream analysis (this is what I'm using it for right now).
+**The goal is to abstract away all the fine details from a rendering engine,** i.e. Geometry, Texture, Cameras, Canvases etc., and provide an easy but flexible API forscientific plotting **where performance is the goal**.
 
-Since `fastplotlib` uses `pygfx`, it works using a RFB in jupyter notebooks!
+Note: this is, and **never will be, a replacement for plotting libraries such as `matplotlib` or `seaborn` which serve other purposes.** Instead, I see this as having a huge potential for large-scale imaging analysis, real-time Online closed-loop experiments, and massive insane visualizations combining large-scale imaging, behavior and downstream analysis (this is what I'm using it for right now).
+
+Since `fastplotlib` uses the `pygfx` engine, it works within jupyter notebooks!
 
 ### Examples
 
@@ -248,6 +257,8 @@ plot.image(data=data,  vmin=0, vmax=255, cmap='viridis')
 
 plot.show()
 ```
+
+Thus, in a few lines of code (as opposed to ~50) we can draw images!
 
 Grid plots are also easy to create, see `gridplot_simple.ipynb`
 
